@@ -1,5 +1,5 @@
 /*
-   Nom: Bouron LED Externe Potentiometre - Solution
+   Nom: Bouton LED Externe Potentiometre - Solution
 
    Fonctionnement général: Ce programme fait clignoter une LED externe lorsqu'on appuie
    sur un bouton. La vitesse du clignotement varie en fonction de de la position du potentiometre,
