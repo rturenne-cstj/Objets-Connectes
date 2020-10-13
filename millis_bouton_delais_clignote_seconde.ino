@@ -11,15 +11,14 @@ const int boutPIN = 7;      //N'importe quelle pin
 
 //Déclaration des variables
 int boutonEnfonce = 0;      //Vérifier si le bouton est enfoncé
-int etatLED = 0;            //Abstraction pour l'état de la LED. Vaut 0 ou 1
-
-unsigned long compteur = 0; //unsigned long parce que c'est des milli secondes
+int etatLEDExterne = 0;     //Abstraction pour l'état de la LED. Vaut 0 ou 1
 int etatLEDInterne = 0;     //abstraction: vaut 0 si éteint et 1 si allumée
-unsigned long millisAvant = 0; //La milli seconde exacte où on calcule la seconde avant de l'imprimer
+unsigned long compteur = 0; //unsigned long parce que c'est des milli secondes
+unsigned long secondeMillisAvant = 0; //La milli seconde exacte où on calcule la seconde avant de l'imprimer
 unsigned long LEDInterneMillisAvant = 0; //La milli seconde exacte quand on a allumé la LED la dernière fois
 unsigned long boutonMillisAvant = 0; //La ms exacte quand on a enfoncé le bouton
-unsigned long monDelais = 500; //attente entre les actions du bouton (peut varier)
-unsigned long vitesseClignote = 250; //Vitesse (fréquence) du clignetoment de la LED Interne
+const unsigned long monDelais = 500; //attente entre les actions du bouton (peut varier)
+const unsigned long vitesseClignote = 250; //Vitesse (fréquence) du clignetoment de la LED Interne
 
 void setup() {
   pinMode(LEDInterne, OUTPUT);
@@ -66,14 +65,14 @@ void loop() //20,000 itérations par seconde!
   if (boutonEnfonce == 1 && compteur - boutonMillisAvant > monDelais)
   {
     boutonMillisAvant = compteur; //Instant précis où le bouton est enfoncé
-    if (etatLED == 0)//la LED est éteinte
+    if (etatLEDExterne == 0)//la LED est éteinte
     {
       digitalWrite(LEDPIN, HIGH);//Action: Allumer la LED
-      etatLED = 1;//Abstraction: doit être juste après digitalWrite(), l'action
+      etatLEDExterne = 1;//Abstraction: doit être juste après digitalWrite(), l'action
     } else
     {
       digitalWrite(LEDPIN, LOW);
-      etatLED = 0;
+      etatLEDExterne = 0;
     }
   }
 
@@ -83,9 +82,9 @@ void loop() //20,000 itérations par seconde!
 
   //On entre dans le IF seulement lorsqu'une nouvelle seconde débute et on
   // s'assure qu'on attend à la prochaine milli-seconde.
-  if (compteur % 1000 == 0  && compteur > millisAvant)
+  if (compteur % 1000 == 0  && compteur > secondeMillisAvant)
   {
-    millisAvant = compteur;
+    secondeMillisAvant = compteur;
     Serial.println(compteur / 1000);
   }
 }
